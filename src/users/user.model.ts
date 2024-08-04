@@ -20,7 +20,7 @@ export class User {
     @ApiProperty({example: true, description: 'Активен пользователь или забанен'})
     @Column({type: 'boolean', default: true})
     is_active: boolean
-
+    
     @ApiProperty({example: Role, description: 'Роли пользователя'})
     @ManyToMany(type => Role, role => role.users, {onDelete: 'CASCADE'})
     @JoinTable({name: 'users_roles'})
