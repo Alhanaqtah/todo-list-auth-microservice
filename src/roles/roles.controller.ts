@@ -8,8 +8,8 @@ import { Roles } from 'src/auth/roles.decorator';
 
 @ApiTags('roles')
 @ApiBearerAuth()
-// @UseGuards(RolesGuard)
-// @Roles('admin')
+@UseGuards(RolesGuard)
+@Roles('admin')
 @Controller('roles')
 export class RolesController {
     constructor(private roleService: RolesService) {}
