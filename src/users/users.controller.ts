@@ -8,8 +8,6 @@ import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('users')
 @ApiBearerAuth()
-// @UseGuards(RolesGuard)
-// @Roles('admin')
 @Controller('users')
 export class UsersController {
     constructor(private userService: UsersService) {}
@@ -17,6 +15,8 @@ export class UsersController {
     @ApiOperation({ summary: 'Создать пользователя' })
     @ApiResponse({ status: 201, description: 'Пользователь успешно создан', type: User })
     @ApiResponse({ status: 400, description: 'Некорректные данные' })
+    @UseGuards(RolesGuard)
+    @Roles('admin')
     @Post()
     async create(@Body() userDto: CreateUserDto) {
         return this.userService.createUser(userDto);
@@ -25,6 +25,8 @@ export class UsersController {
     @ApiOperation({ summary: 'Получить информацию о пользователе' })
     @ApiResponse({ status: 200, description: 'Информация о пользователе', type: User })
     @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+    @UseGuards(RolesGuard)
+    @Roles('admin')
     @Get(':id')
     async read(@Param('id') userId: string) {
         return this.userService.read(userId);
@@ -34,6 +36,8 @@ export class UsersController {
     @ApiResponse({ status: 200, description: 'Пользователь успешно обновлен', type: User })
     @ApiResponse({ status: 400, description: 'Некорректные данные' })
     @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+    @UseGuards(RolesGuard)
+    @Roles('admin')
     @Patch(':id')
     async update(@Param('id') userId: string, @Body() userDto: CreateUserDto) {
         return this.userService.update(userId, userDto);
@@ -42,6 +46,8 @@ export class UsersController {
     @ApiOperation({ summary: 'Удалить пользователя' })
     @ApiResponse({ status: 200, description: 'Пользователь успешно удален' })
     @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+    @UseGuards(RolesGuard)
+    @Roles('admin')
     @Delete(':id')
     async delete(@Param('id') userId: string) {
         return this.userService.remove(userId);
