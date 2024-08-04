@@ -31,7 +31,7 @@ import { JwtModule } from '@nestjs/jwt';
       database: process.env.POSTGRES_DB,
       entities: [User, Role],
       synchronize: true,
-    })
+    }),
   ],
 })
 export class AppModule {}

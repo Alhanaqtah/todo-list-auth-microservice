@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,11 +6,13 @@ import { User } from './user.model';
 import { RolesService } from 'src/roles/roles.service';
 import { Role } from 'src/roles/roles.model';
 import * as bcryptjs from 'bcryptjs';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User) private userRepo: Repository<User>,
-                private roleService: RolesService) {}
+                private roleService: RolesService,
+                @Inject('TODOLIST_SERVICE') private rabbitClient: ClientProxy) {}
 
     async createUser(dto: CreateUserDto) {
         const potentialUser = await this.findUserByEmail(dto.email);
@@ -94,7 +96,13 @@ export class UsersService {
     }
 
     async remove(userId: string) {
-        this.userRepo.delete({id: userId});
+        const deleteResult = await this.userRepo.delete({id: userId});
+        
+        if (deleteResult.affected === 0) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        this.rabbitClient.emit('remove-user-data', { id: userId });
     }
 
     async findUserByEmail(email: string): Promise<User> {
