@@ -1,6 +1,6 @@
 # Auth Microservice
 
-The **Auth Microservice** is responsible for managing user authentication, registration, and role-based access control (RBAC). It provides functionality for user login, signup, and role management. This service is designed to be used as part of a microservices architecture and communicates with other services (such as a Todo List service) via RabbitMQ.
+The **Auth Microservice** is responsible for managing user authentication, registration, and role-based access control (RBAC). It provides functionality for user login, signup, and role management. This service is designed to be used as part of a microservices architecture and communicates with other services (such as a [Todo List service](https://github.com/Alhanaqtah/todo-list-microservice/tree/microservice)) via RabbitMQ.
 
 ## Features
 
